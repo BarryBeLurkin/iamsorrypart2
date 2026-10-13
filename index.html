@@ -3,46 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#160812" />
   <title>I'm Sorry, My Love ❤️</title>
   <style>
     * { box-sizing: border-box; }
     :root { --pink: #ff5f91; --deep: #2a1022; }
+    html { min-height: 100%; background: #160812; }
     body {
       margin: 0;
       min-height: 100vh;
+      min-height: 100svh;
       font-family: Georgia, "Times New Roman", serif;
       color: #fff;
       background: #160812;
       display: grid;
       place-items: center;
       padding: 28px 16px;
-      isolation: isolate;
       position: relative;
+      isolation: isolate;
+      overflow-x: hidden;
     }
+    /* Keep the video above the body's background, but below the overlay and card. */
     .video-background {
       position: fixed;
       inset: 0;
+      display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center;
-      z-index: -2;
+      z-index: -1;
+      background: #160812;
     }
     .video-overlay {
       position: fixed;
       inset: 0;
-      background: linear-gradient(135deg, rgba(20, 5, 18, .22), rgba(91, 12, 48, .18));
-      z-index: -1;
+      background: linear-gradient(135deg, rgba(20, 5, 18, .20), rgba(91, 12, 48, .16));
+      z-index: 0;
       pointer-events: none;
     }
     .card {
+      position: relative;
+      z-index: 1;
       width: min(760px, 100%);
       padding: clamp(25px, 5vw, 48px);
       border: 1px solid rgba(255,255,255,.28);
       border-radius: 28px;
-      background: rgba(35, 8, 25, .34);
-      box-shadow: 0 20px 70px rgba(0,0,0,.35);
+      background: rgba(35, 8, 25, .40);
+      box-shadow: 0 20px 70px rgba(0,0,0,.30);
       backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
       text-align: center;
       animation: rise .9s ease both;
     }
@@ -58,24 +68,31 @@
       transition: transform .2s ease;
     }
     button:hover { transform: translateY(-2px) scale(1.02); }
+    button:focus-visible { outline: 3px solid white; outline-offset: 4px; }
     #extra { display: none; color: #ffe6ee; margin-top: 20px; }
-    .tiny { margin-top: 24px; font: .8rem Arial, sans-serif; color: #f5c8d8; opacity: .85; }
+    .tiny { margin-top: 24px; font: .8rem Arial, sans-serif; color: #f5c8d8; opacity: .95; }
     @keyframes pulse { 50% { transform: scale(1.13); } }
     @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
-    @media (max-width: 600px) { .card { border-radius: 22px; } }
+    @media (max-width: 600px) {
+      body { padding: 18px 12px; }
+      .card { border-radius: 22px; background: rgba(35, 8, 25, .48); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .heart, .card { animation: none; }
+      button { transition: none; }
+    }
   </style>
 </head>
 <body>
-  <video class="video-background" autoplay muted loop playsinline preload="auto">
-    <source src="background-video.mp4" type="video/mp4">
-    Your browser does not support background video.
+  <video id="background-video" class="video-background" autoplay muted loop playsinline webkit-playsinline preload="auto" aria-hidden="true">
+    <source src="./background-video.mp4" type="video/mp4" />
   </video>
   <div class="video-overlay" aria-hidden="true"></div>
+
   <main class="card">
     <div class="heart" aria-hidden="true">❤️</div>
     <div class="subtitle">A message from my heart</div>
     <h1>I'm Sorry, My Love</h1>
-
     <p>
       Baby, I want to sincerely apologize for being a little petty in the game.
       I know the way I acted could have hurt you, and even though hurting you
@@ -83,7 +100,6 @@
       made you feel. I'm also sorry for lying to you. I should have been honest
       with you from the beginning, and I understand why that damaged your trust.
     </p>
-
     <p>
       You have every right to be mad at me, and I'm not going to act like your
       feelings aren't valid or make excuses for what I did. I understand why
@@ -92,7 +108,6 @@
       make you feel like your feelings don't matter to me. You mean so much to
       me, and I want my actions to show you that—not just my words.
     </p>
-
     <p>
       I'm not expecting you to get over it instantly or forgive me just because
       I'm apologizing. I just want you to know that I'm genuinely sorry, that I
@@ -100,15 +115,41 @@
       thoughtful, and less petty moving forward. I love you, and I want to make
       things right with you. ❤️
     </p>
-
-    <button onclick="document.getElementById('extra').style.display =
-      document.getElementById('extra').style.display === 'block' ? 'none' : 'block'">
-      One more thing 💌
-    </button>
+    <button id="extra-button" type="button" aria-expanded="false" aria-controls="extra">One more thing 💌</button>
     <p id="extra">You don't deserve empty promises. I want to earn back your trust with patience, honesty, and the way I treat you every day. I love you. ❤️</p>
-
     <div class="signature">With all my love, always ❤️</div>
     <div class="tiny">Made for you, with love.</div>
   </main>
+
+  <script>
+    const video = document.getElementById('background-video');
+    // Autoplay requires muted playback; retry once the page has loaded.
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    window.addEventListener('load', () => {
+      const playAttempt = video.play();
+      if (playAttempt && typeof playAttempt.catch === 'function') {
+        playAttempt.catch(() => {
+          // Some browsers delay autoplay. Retry when the visitor interacts.
+          const resumeVideo = () => {
+            video.play().catch(() => {});
+            document.removeEventListener('pointerdown', resumeVideo);
+            document.removeEventListener('touchstart', resumeVideo);
+            document.removeEventListener('keydown', resumeVideo);
+          };
+          document.addEventListener('pointerdown', resumeVideo, { once: true });
+          document.addEventListener('touchstart', resumeVideo, { once: true, passive: true });
+          document.addEventListener('keydown', resumeVideo, { once: true });
+        });
+      }
+    });
+    document.getElementById('extra-button').addEventListener('click', () => {
+      const extra = document.getElementById('extra');
+      const isOpen = extra.style.display === 'block';
+      extra.style.display = isOpen ? 'none' : 'block';
+      document.getElementById('extra-button').setAttribute('aria-expanded', String(!isOpen));
+    });
+  </script>
 </body>
 </html>
