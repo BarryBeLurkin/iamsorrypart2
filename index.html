@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>I'm Sorry, My Love ❤️</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root { --pink: #ff5f91; --deep: #2a1022; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Georgia, "Times New Roman", serif;
+      color: #fff;
+      background: #160812;
+      display: grid;
+      place-items: center;
+      padding: 28px 16px;
+      isolation: isolate;
+      position: relative;
+    }
+    .video-background {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      z-index: -2;
+    }
+    .video-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(20, 5, 18, .22), rgba(91, 12, 48, .18));
+      z-index: -1;
+      pointer-events: none;
+    }
+    .card {
+      width: min(760px, 100%);
+      padding: clamp(25px, 5vw, 48px);
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: 28px;
+      background: rgba(35, 8, 25, .34);
+      box-shadow: 0 20px 70px rgba(0,0,0,.35);
+      backdrop-filter: blur(2px);
+      text-align: center;
+      animation: rise .9s ease both;
+    }
+    .heart { font-size: 2.5rem; animation: pulse 1.6s infinite; }
+    h1 { margin: 10px 0 18px; font-size: clamp(2rem, 6vw, 3.4rem); color: #ffd6e3; }
+    .subtitle { color: #ffc1d5; letter-spacing: .08em; text-transform: uppercase; font: 600 .78rem Arial, sans-serif; }
+    p { font-size: clamp(1.05rem, 2.4vw, 1.23rem); line-height: 1.85; margin: 18px 0; }
+    .signature { margin-top: 26px; color: #ffd6e3; font-size: 1.35rem; font-style: italic; }
+    button {
+      margin-top: 14px; padding: 13px 22px; border: 0; border-radius: 999px;
+      background: linear-gradient(90deg, #ff7aa8, #ff477f); color: white;
+      font-size: 1rem; cursor: pointer; box-shadow: 0 8px 22px #ff477f45;
+      transition: transform .2s ease;
+    }
+    button:hover { transform: translateY(-2px) scale(1.02); }
+    #extra { display: none; color: #ffe6ee; margin-top: 20px; }
+    .tiny { margin-top: 24px; font: .8rem Arial, sans-serif; color: #f5c8d8; opacity: .85; }
+    @keyframes pulse { 50% { transform: scale(1.13); } }
+    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 600px) { .card { border-radius: 22px; } }
+  </style>
+</head>
+<body>
+  <video class="video-background" autoplay muted loop playsinline preload="auto">
+    <source src="background-video.mp4" type="video/mp4">
+    Your browser does not support background video.
+  </video>
+  <div class="video-overlay" aria-hidden="true"></div>
+  <main class="card">
+    <div class="heart" aria-hidden="true">❤️</div>
+    <div class="subtitle">A message from my heart</div>
+    <h1>I'm Sorry, My Love</h1>
+
+    <p>
+      Baby, I want to sincerely apologize for being a little petty in the game.
+      I know the way I acted could have hurt you, and even though hurting you
+      wasn't my intention, I understand that my intentions don't erase how it
+      made you feel. I'm also sorry for lying to you. I should have been honest
+      with you from the beginning, and I understand why that damaged your trust.
+    </p>
+
+    <p>
+      You have every right to be mad at me, and I'm not going to act like your
+      feelings aren't valid or make excuses for what I did. I understand why
+      you're upset, and I'm sorry for putting you in that position. I love you
+      so much, more than I can properly explain, and the last thing I want is to
+      make you feel like your feelings don't matter to me. You mean so much to
+      me, and I want my actions to show you that—not just my words.
+    </p>
+
+    <p>
+      I'm not expecting you to get over it instantly or forgive me just because
+      I'm apologizing. I just want you to know that I'm genuinely sorry, that I
+      care about you deeply, and that I'll do my best to be more honest, more
+      thoughtful, and less petty moving forward. I love you, and I want to make
+      things right with you. ❤️
+    </p>
+
+    <button onclick="document.getElementById('extra').style.display =
+      document.getElementById('extra').style.display === 'block' ? 'none' : 'block'">
+      One more thing 💌
+    </button>
+    <p id="extra">You don't deserve empty promises. I want to earn back your trust with patience, honesty, and the way I treat you every day. I love you. ❤️</p>
+
+    <div class="signature">With all my love, always ❤️</div>
+    <div class="tiny">Made for you, with love.</div>
+  </main>
+</body>
+</html>
